@@ -25,7 +25,6 @@ class Users(Base):
                 "message": "User created successfully, Try login!!!"
             }, 201
         except Exception as ex:
-            print(ex)
             return {
                 "errorMsg": "Something went wrong, please try after some time"
             }, 500
