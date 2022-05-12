@@ -19,7 +19,13 @@ async def login_user(login_user: LoginUser):
 @router.post("/create-user")
 async def create_user(user: User):
         """ Creates a user """
-        return Users().create_user(user)
+        data = { 
+            "firstName": user.firstName, 
+            "lastName": user.lastName,
+            "email": user.email,
+            "password": user.password
+        }
+        return Users().create_user(data)
 
 @router.get("/{email}")
 async def get(email):

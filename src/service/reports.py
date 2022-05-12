@@ -1,13 +1,11 @@
 """ Graph Generation Service """
-import json
-
 import pandas as pd
 
 
-class GraphGeneration():
-    """ Todos Service """
+class Reports():
+    """ Reports Service """
 
-    def file_to_dataframe(self, file, data):
+    def file_to_dataframe(self, file):
         """ Convert the uploaded file to dataframe """
 
         # JSON File
@@ -19,7 +17,6 @@ class GraphGeneration():
 
         # Xls
         df = pd.read_excel(file)
-        print(data)
         object_fields = list(df.select_dtypes(include=["object"]).columns)
         data_fields = list(df.select_dtypes(
             include=["float64", "int64"]).columns)
@@ -27,7 +24,7 @@ class GraphGeneration():
             df[t] = df[t].dt.strftime("%Y-%m-%d")
         return {
             "fields": list(df.columns),
-            "data": df.to_dict(orient="records"),
+            # "data": df.to_dict(orient="records"),
             "objectFields": object_fields,
             "data_fields": data_fields
         }
