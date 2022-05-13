@@ -1,11 +1,34 @@
 """ Graph Generation Service """
 import pandas as pd
+import uuid
+
+from service.base import Base
+from util.utils import words_to_snake_case
+from util.db_util import DBUtil
 
 
-class Reports():
+
+class Reports(Base):
     """ Reports Service """
 
-    def file_to_dataframe(self, file):
+    def get_all(self):
+        """ Get all the Reports """
+        reports = list(self.collection.find({}, {"_id": 0}))
+        return reports
+    
+    def delete_one(self, report_id):
+        """ Delete one Report """
+        try:
+            self.collection.delete_one({ "id": report_id })
+            return {
+                "message": "Report Deleted Successfully"
+            }
+        except Exception as ex:
+            return {
+                "errorMsg": "Something went wrong, please try after some time"
+            }
+
+    def file_to_dataframe(self, file, data):
         """ Convert the uploaded file to dataframe """
 
         # JSON File
@@ -22,9 +45,34 @@ class Reports():
             include=["float64", "int64"]).columns)
         for t in df.select_dtypes(include=["datetime64"]).columns:
             df[t] = df[t].dt.strftime("%Y-%m-%d")
-        return {
-            "fields": list(df.columns),
-            # "data": df.to_dict(orient="records"),
-            "objectFields": object_fields,
-            "data_fields": data_fields
-        }
+
+        collection_name = words_to_snake_case(data["name"])
+        collection_data = df.to_dict(orient="records")
+
+        data_collection = DBUtil().get_collection(collection_name)
+        data_collection.insert_many(
+            collection_data
+        )
+
+        try:
+            write_obj = {
+                **data,
+                "fields": list(df.columns),
+                "collectionName": collection_name,
+                "objectFields": object_fields,
+                "dataFields": data_fields,
+                "id": str(uuid.uuid4())
+            }
+
+            self.collection.insert_one(write_obj)
+            write_obj.pop('_id')
+
+            return {
+                'message': 'Report created',
+                'item': write_obj
+            }
+        except Exception as ex:
+            print(ex)
+            return {
+                "errorMsg": "Something went wrong, please try after some time"
+            }
