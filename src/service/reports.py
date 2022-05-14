@@ -7,7 +7,6 @@ from util.utils import words_to_snake_case
 from util.db_util import DBUtil
 
 
-
 class Reports(Base):
     """ Reports Service """
 

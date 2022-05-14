@@ -10,12 +10,12 @@ router = APIRouter(
     tags=["reports"],
 )
 
-@router.get("/")
+@router.get("")
 async def get():
     """ Return all the reports """
     return Reports().get_all()
 
-@router.post("/")
+@router.post("")
 async def post(
         file: UploadFile = File(...), 
         name: str = Form(...), 
