@@ -18,11 +18,20 @@ class Reports(Base):
     def delete_one(self, report_id):
         """ Delete one Report """
         try:
+
+            report_data = self.collection.find_one({"id": report_id}, {"_id": 0})
+
+            if report_data:
+                collection_name = words_to_snake_case(report_data["name"])
+                DBUtil().get_collection(collection_name).drop()
+
             self.collection.delete_one({ "id": report_id })
+
             return {
                 "message": "Report Deleted Successfully"
             }
         except Exception as ex:
+            print(ex)
             return {
                 "errorMsg": "Something went wrong, please try after some time"
             }
@@ -66,9 +75,11 @@ class Reports(Base):
             self.collection.insert_one(write_obj)
             write_obj.pop('_id')
 
+            updated_reports = list(self.collection.find({}, {"_id": 0}))
+
             return {
                 'message': 'Report created',
-                'item': write_obj
+                "reports": updated_reports
             }
         except Exception as ex:
             print(ex)
