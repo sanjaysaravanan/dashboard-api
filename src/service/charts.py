@@ -28,6 +28,9 @@ class Charts(Base):
     def save_chart(self, data):
         """ Store a Chart """
         try:
+
+            print(data)
+
             write_obj = {
               **data,
               "id": str(uuid.uuid4())
@@ -35,7 +38,7 @@ class Charts(Base):
 
             self.collection.insert_one(write_obj)
             return {
-              "message": "Chart Deleted Successfully"
+              "message": "Chart Created Successfully"
             }
         except Exception as ex:
             print(ex)
