@@ -1,5 +1,6 @@
-""" Common utility functions """
+""" Common utilities """
 
+ERROR_MSG = 'Something went wrong, please try after some time'
 
 def snake_case(string_to_convert):
     """ Returns snake_case representation of CamelCase string """
