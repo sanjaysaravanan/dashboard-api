@@ -3,7 +3,8 @@
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 
-from schema.charts import LineChart, LineData, PieChart, PieData
+from schema.charts import LineChart, LineData, PieChart, \
+    PieData, BarChart, BarData
 from service.charts import Charts
 
 router = APIRouter(
@@ -53,6 +54,25 @@ async def get_pie_data(pie_chart: PieChart):
     data = jsonable_encoder(pie_chart)
 
     return Charts().data_pie_chart(data)
+
+
+# Bar Chart
+@router.post("/bar")
+async def create_pie_chart(bar_data: BarData):
+    """ Create new Bar Chart """
+
+    data = jsonable_encoder(bar_data)
+
+    return Charts().save_line_chart(data)
+
+
+@router.post("/bar/data")
+async def get_bar_data(bar_chart: BarChart):
+    """ Retuns Pie Chart data """
+
+    data = jsonable_encoder(bar_chart)
+
+    return Charts().data_bar_chart(data)
 
 
 @router.delete("/{chart_id}")

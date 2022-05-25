@@ -21,6 +21,7 @@ class Charts(Base):
                 "errorMsg": ERROR_MSG
             }
 
+
     def delete_one(self, chart_id):
         """ Delete one Chart """
         try:
@@ -34,6 +35,8 @@ class Charts(Base):
                 "errorMsg": ERROR_MSG
             }
 
+
+    # Line Chart
     def save_line_chart(self, data):
         """ Store a Line Chart """
         try:
@@ -71,12 +74,12 @@ class Charts(Base):
             
             df_data = pd.DataFrame(list(DBUtil().get_collection(
                 chart_data['collectionName']).find({}, query)))
-            print(chart_data['accumulator'])
             df_grouped = pd.DataFrame()
+            group_by_obj = df_data.groupby(by=[chart_data['xaxis']], as_index=False)
             if chart_data['accumulator'] == 'avg':
-                df_grouped = df_data.groupby(by=[chart_data['xaxis']], as_index=False).mean()
+                df_grouped = group_by_obj.mean().round(2)
             elif chart_data['accumulator'] == 'sum':
-                df_grouped = df_data.groupby(by=[chart_data['xaxis']], as_index=False).sum()
+                df_grouped = group_by_obj.sum()
             return {
                 **chart_data,
                 'chartData': df_grouped.to_dict(orient="records")
@@ -84,8 +87,9 @@ class Charts(Base):
         except Exception as ex:
             print(ex)
             return { "errorMsg": ERROR_MSG }
-    
 
+
+    # Pie Chart
     def save_pie_chart(self, data):
         """ Saves the details of the Pie Chart """
         try:
@@ -120,6 +124,32 @@ class Charts(Base):
             
             df_grouped = pd.DataFrame()
             group_by_obj = df_data.groupby(by=[chart_data['showBy']], as_index=False)
+            if chart_data['accumulator'] == 'avg':
+                df_grouped = group_by_obj.mean().round(2)
+            elif chart_data['accumulator'] == 'sum':
+                df_grouped = group_by_obj.sum()
+            return {
+                **chart_data,
+                'chartData': df_grouped.to_dict(orient="records")
+            }
+        except Exception as ex:
+            print(ex)
+            return { "errorMsg": ERROR_MSG }
+
+
+    # Bar Chart
+    def data_bar_chart(self, chart_data):
+        """ Return line Chart data """
+        try:
+            query = { '_id': 0, chart_data['xaxis']: 1 }
+
+            for line in chart_data['bars']:
+                query[line['dataField']] = 1
+            
+            df_data = pd.DataFrame(list(DBUtil().get_collection(
+                chart_data['collectionName']).find({}, query)))
+            df_grouped = pd.DataFrame()
+            group_by_obj = df_data.groupby(by=[chart_data['xaxis']], as_index=False)
             if chart_data['accumulator'] == 'avg':
                 df_grouped = group_by_obj.mean().round(2)
             elif chart_data['accumulator'] == 'sum':

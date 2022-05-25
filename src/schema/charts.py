@@ -12,7 +12,7 @@ class ChartModel(BaseModel):
 
 
 # Line Chart
-class Line(BaseModel):
+class LineBar(BaseModel):
     id: str
     dataField: str
     color: str
@@ -20,7 +20,7 @@ class Line(BaseModel):
 
 class LineData(ChartModel):
     xaxis: str
-    lines: list[Line]
+    lines: list[LineBar]
     accumulator: str
 
 
@@ -40,3 +40,15 @@ class PieChart(PieData):
     id: str
     collectionName: str
 
+
+# Bar Chart
+class BarData(ChartModel):
+    xaxis: str
+    bars: list[LineBar]
+    accumulator: str
+    stacked: bool
+
+
+class BarChart(BarData):
+    id: str
+    collectionName: str
