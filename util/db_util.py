@@ -1,7 +1,7 @@
 """
 Handles all database functions
 """
-
+import os
 from pymongo import MongoClient
 
 
@@ -18,11 +18,7 @@ class DBUtil:
 
     def __init__(self, db_name="todo-api"):
         self.client = MongoClient(
-            self.db_host,
-            port=self.db_port,
-            username=self.db_user,
-            password=self.db_password,
-            authMechanism=self.db_auth_mech
+            os.getenv('MONGO_URI')
         )
         self.db_client = self.client[db_name]
 

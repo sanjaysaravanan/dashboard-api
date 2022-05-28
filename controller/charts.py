@@ -79,3 +79,9 @@ async def get_bar_data(bar_chart: BarChart):
 async def delete_chart(chart_id):
     """ Delete One Chart """
     return Charts().delete_one(chart_id)
+
+
+@router.get("/data/{chart_id}")
+async def get_chart_data(chart_id):
+    """ Get Chart Data """
+    return Charts().get_chart_data(chart_id)

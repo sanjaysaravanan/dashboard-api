@@ -7,3 +7,4 @@ passlib==1.7.4
 openpyxl==3.0.9
 python-multipart==0.0.5
 uvicorn==0.17.6
+dnspython==2.2.1

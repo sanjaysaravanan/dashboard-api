@@ -161,3 +161,26 @@ class Charts(Base):
         except Exception as ex:
             print(ex)
             return { "errorMsg": ERROR_MSG }
+    
+
+    # Get Chart Data
+    def get_chart_data(self, chart_id):
+        """ Get Chart Data """
+
+        try:
+            chart_obj = self.collection.find_one({ 'id': chart_id }, { '_id': 0 })
+
+            response = None
+            chart_type = chart_obj['type']
+
+            if chart_type == 'line':
+                response = self.data_line_chart(chart_obj)
+            elif chart_type == 'pie':
+                response = self.data_pie_chart(chart_obj)
+            elif chart_type == 'bar':
+                response = self.data_bar_chart(chart_obj)
+            
+            return response
+        except Exception as ex:
+            print(ex)
+            return { "errorMsg": ERROR_MSG }
