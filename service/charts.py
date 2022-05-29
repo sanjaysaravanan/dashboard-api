@@ -16,10 +16,7 @@ class Charts(Base):
             reports = list(self.collection.find({}, {"_id": 0}))
             return reports
         except Exception as ex:
-            print(ex)
-            return {
-                "errorMsg": ERROR_MSG
-            }
+            return self.something_went_wrong(ex)
 
 
     def delete_one(self, chart_id):
@@ -30,10 +27,7 @@ class Charts(Base):
               "message": "Chart Deleted Successfully"
             }
         except Exception as ex:
-            print(ex)
-            return {
-                "errorMsg": ERROR_MSG
-            }
+            return self.something_went_wrong(ex)
 
 
     # Line Chart
@@ -58,10 +52,7 @@ class Charts(Base):
               "charts": updated_charts
             }
         except Exception as ex:
-            print(ex)
-            return {
-                "errorMsg": ERROR_MSG
-            }
+            return self.something_went_wrong(ex)
 
 
     def data_line_chart(self, chart_data):
@@ -85,8 +76,7 @@ class Charts(Base):
                 'chartData': df_grouped.to_dict(orient="records")
             }
         except Exception as ex:
-            print(ex)
-            return { "errorMsg": ERROR_MSG }
+            return self.something_went_wrong(ex)
 
 
     # Pie Chart
@@ -110,8 +100,7 @@ class Charts(Base):
                 "charts": updated_charts
             }
         except Exception as ex:
-            print(ex)
-            return { "errorMsg": ERROR_MSG }
+            return self.something_went_wrong(ex)
 
 
     def data_pie_chart(self, chart_data):
@@ -133,8 +122,7 @@ class Charts(Base):
                 'chartData': df_grouped.to_dict(orient="records")
             }
         except Exception as ex:
-            print(ex)
-            return { "errorMsg": ERROR_MSG }
+            return self.something_went_wrong(ex)
 
 
     # Bar Chart
@@ -159,8 +147,7 @@ class Charts(Base):
                 'chartData': df_grouped.to_dict(orient="records")
             }
         except Exception as ex:
-            print(ex)
-            return { "errorMsg": ERROR_MSG }
+           return self.something_went_wrong(ex)
     
 
     # Get Chart Data
@@ -182,5 +169,5 @@ class Charts(Base):
             
             return response
         except Exception as ex:
-            print(ex)
-            return { "errorMsg": ERROR_MSG }
+            return self.something_went_wrong(ex)
+            

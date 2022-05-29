@@ -1,5 +1,5 @@
 """
-Handles all database functions
+Handles all database Operations
 """
 import os
 from pymongo import MongoClient
@@ -7,7 +7,7 @@ from pymongo import MongoClient
 
 class DBUtil:
     """
-    Handles all database communications
+    Handles all database Operations
     """
 
     db_host = "localhost"
@@ -18,19 +18,23 @@ class DBUtil:
 
     def __init__(self, db_name="todo-api"):
         self.client = MongoClient(
-            os.getenv('MONGO_URI')
+            self.db_host,
+            port=self.db_port,
+            username=self.db_user,
+            password=self.db_password,
+            authMechanism=self.db_auth_mech
         )
-        self.db_client = self.client[db_name]
+        self.db_base = self.client[db_name]
 
     def get_db(self):
         """
-        Returns DB client
+        Returns DB
         """
-        return self.db_client
+        return self.db_base
 
     def get_collection(self, collection_name):
         """ Returns collection """
-        return self.db_client[collection_name]
+        return self.db_base[collection_name]
 
     def close_db_conection(self):
         """ Terminate Database connection """

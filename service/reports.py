@@ -2,9 +2,13 @@
 import pandas as pd
 import uuid
 
+from fastapi.responses import JSONResponse
+
 from service.base import Base
 from util.utils import words_to_snake_case
 from util.db_util import DBUtil
+
+
 
 
 class Reports(Base):
@@ -21,6 +25,13 @@ class Reports(Base):
 
             report_data = self.collection.find_one({"id": report_id}, {"_id": 0})
 
+            associated_charts = list(DBUtil().get_collection('charts').find({ 
+                "reportId": report_id 
+             }))
+
+            if associated_charts:
+                return JSONResponse(status_code=400, content={"errorMsg": "Delete all the associated charts"} )
+
             if report_data:
                 collection_name = words_to_snake_case(report_data["name"])
                 DBUtil().get_collection(collection_name).drop()
@@ -31,10 +42,7 @@ class Reports(Base):
                 "message": "Report Deleted Successfully"
             }
         except Exception as ex:
-            print(ex)
-            return {
-                "errorMsg": "Something went wrong, please try after some time"
-            }
+            return self.something_went_wrong(ex)
 
     def file_to_dataframe(self, file, data):
         """ Convert the uploaded file to dataframe """
@@ -48,11 +56,14 @@ class Reports(Base):
 
         # Xls
         df = pd.read_excel(file)
+        print(df.dtypes)
         object_fields = list(df.select_dtypes(include=["object"]).columns)
         data_fields = list(df.select_dtypes(
             include=["float64", "int64"]).columns)
         for t in df.select_dtypes(include=["datetime64"]).columns:
             df[t] = df[t].dt.strftime("%Y-%m-%d")
+
+        print(df)
 
         collection_name = words_to_snake_case(data["name"])
         collection_data = df.to_dict(orient="records")
@@ -82,7 +93,4 @@ class Reports(Base):
                 "reports": updated_reports
             }
         except Exception as ex:
-            print(ex)
-            return {
-                "errorMsg": "Something went wrong, please try after some time"
-            }
+            return self.something_went_wrong(ex)
