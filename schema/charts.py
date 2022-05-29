@@ -1,5 +1,6 @@
 """ Model for Chart """
 
+from typing import List
 from pydantic import BaseModel
 
 
@@ -16,11 +17,11 @@ class LineBar(BaseModel):
     id: str
     dataField: str
     color: str
-    
+
 
 class LineData(ChartModel):
     xaxis: str
-    lines: list[LineBar]
+    lines: List[LineBar]
     accumulator: str
 
 
@@ -44,7 +45,7 @@ class PieChart(PieData):
 # Bar Chart
 class BarData(ChartModel):
     xaxis: str
-    bars: list[LineBar]
+    bars: List[LineBar]
     accumulator: str
     stacked: bool
 
