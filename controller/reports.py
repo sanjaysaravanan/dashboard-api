@@ -10,18 +10,20 @@ router = APIRouter(
     tags=["reports"],
 )
 
+
 @router.get("")
 async def get():
     """ Return all the reports """
     return Reports().get_all()
 
+
 @router.post("")
 async def post(
-        file: UploadFile = File(...), 
-        name: str = Form(...), 
-        desc: str = Form(...), 
-        type: str = Form(...)
-    ):
+    file: UploadFile = File(...),
+    name: str = Form(...),
+    desc: str = Form(...),
+    type: str = Form(...)
+):
     """ Return file location to Service """
     contents = await file.read()
     data = {
@@ -30,6 +32,7 @@ async def post(
         'type': type
     }
     return Reports().file_to_dataframe(contents, data)
+
 
 @router.delete("/{report_id}")
 async def delete(report_id):

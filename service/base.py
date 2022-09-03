@@ -16,8 +16,8 @@ class Base(abc.ABC):
         self.logger = logging.getLogger(self.class_name)
         self.collection_name = snake_case(self.class_name)
         self.collection = DBUtil().get_collection(self.collection_name)
-    
+
     def something_went_wrong(self, ex):
         """ Handle Internal Server Error Response """
         print(ex)
-        return JSONResponse( status_code=500, content={ "errorMsg": ERROR_MSG } )
+        return JSONResponse(status_code=500, content={"errorMsg": ERROR_MSG})

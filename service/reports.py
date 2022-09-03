@@ -9,8 +9,6 @@ from util.utils import words_to_snake_case
 from util.db_util import DBUtil
 
 
-
-
 class Reports(Base):
     """ Reports Service """
 
@@ -18,25 +16,31 @@ class Reports(Base):
         """ Get all the Reports """
         reports = list(self.collection.find({}, {"_id": 0}))
         return reports
-    
+
     def delete_one(self, report_id):
         """ Delete one Report """
         try:
 
-            report_data = self.collection.find_one({"id": report_id}, {"_id": 0})
+            report_data = self.collection.find_one(
+                {"id": report_id},
+                {"_id": 0}
+            )
 
-            associated_charts = list(DBUtil().get_collection('charts').find({ 
-                "reportId": report_id 
-             }))
+            associated_charts = list(DBUtil().get_collection('charts').find({
+                "reportId": report_id
+            }))
 
             if associated_charts:
-                return JSONResponse(status_code=400, content={"errorMsg": "Delete all the associated charts"} )
+                return JSONResponse(
+                    status_code=400,
+                    content={"errorMsg": "Delete all the associated charts"}
+                )
 
             if report_data:
                 collection_name = words_to_snake_case(report_data["name"])
                 DBUtil().get_collection(collection_name).drop()
 
-            self.collection.delete_one({ "id": report_id })
+            self.collection.delete_one({"id": report_id})
 
             return {
                 "message": "Report Deleted Successfully"

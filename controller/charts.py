@@ -12,6 +12,7 @@ router = APIRouter(
     tags=["charts"],
 )
 
+
 @router.get("")
 async def get_all_charts():
     """ Get all Charts """
@@ -19,6 +20,8 @@ async def get_all_charts():
     return Charts().get_all()
 
 # Line Chart
+
+
 @router.post("/line")
 async def create_line_chart(line_data: LineData):
     """ Create new line Chart """
