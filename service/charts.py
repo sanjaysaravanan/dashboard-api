@@ -70,7 +70,7 @@ class Charts(Base):
             if chart_data['accumulator'] == 'avg':
                 df_grouped = group_by_obj.mean().round(2)
             elif chart_data['accumulator'] == 'sum':
-                df_grouped = group_by_obj.sum()
+                df_grouped = group_by_obj.sum().round(2)
             return {
                 **chart_data,
                 'chartData': df_grouped.to_dict(orient="records")
@@ -123,7 +123,7 @@ class Charts(Base):
             if chart_data['accumulator'] == 'avg':
                 df_grouped = group_by_obj.mean().round(2)
             elif chart_data['accumulator'] == 'sum':
-                df_grouped = group_by_obj.sum()
+                df_grouped = group_by_obj.sum().round(2)
             return {
                 **chart_data,
                 'chartData': df_grouped.to_dict(orient="records")
