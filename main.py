@@ -4,7 +4,7 @@ from fastapi import FastAPI
 
 from fastapi.middleware.cors import CORSMiddleware
 
-from controller import users, reports, charts
+from controller import users, reports, charts, dashboard
 
 from dotenv import load_dotenv
 
@@ -25,3 +25,4 @@ app.add_middleware(
 app.include_router(users.router)
 app.include_router(reports.router)
 app.include_router(charts.router)
+app.include_router(dashboard.router)
