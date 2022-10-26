@@ -6,6 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from controller import users, reports, charts
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 

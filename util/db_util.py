@@ -15,13 +15,11 @@ class DBUtil:
     db_port = 27021
     db_auth_mech = "SCRAM-SHA-1"
 
+    print(os.getenv('MONGO_URI'))
+
     def __init__(self, db_name="todo-api"):
         self.client = MongoClient(
-            self.db_host,
-            port=self.db_port,
-            username=self.db_user,
-            password=self.db_password,
-            authMechanism=self.db_auth_mech
+            os.getenv('MONGO_URI')
         )
         self.db_base = self.client[db_name]
 
