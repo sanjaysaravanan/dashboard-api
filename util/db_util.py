@@ -2,33 +2,35 @@
 Handles all database Operations
 """
 import os
+from dotenv import load_dotenv
+
 from pymongo import MongoClient
 
+load_dotenv()
 
 class DBUtil:
     """
     Handles all database Operations
     """
-    db_host = "localhost"
-    db_user = "root"
-    db_password = "password"
-    db_port = 27021
+    db_host = os.getenv('db_host') or "localhost"
+    db_user = os.getenv('db_host') or "root"
+    db_password = os.getenv('db_host') or "password"
+    db_port = os.getenv('db_host') or 27017
     db_auth_mech = "SCRAM-SHA-1"
 
     def __init__(self, db_name="todo-api"):
-        self.client = MongoClient(
-            f'mongodb://{self.db_user}:{self.db_password}@{self.db_host}:27017/{db_name}')
+        self.client = MongoClient(os.getenv('MONGO_URI'))
         self.db_client = self.client[db_name]
 
     def get_db(self):
         """
         Returns DB
         """
-        return self.db_base
+        return self.db_client
 
     def get_collection(self, collection_name):
         """ Returns collection """
-        return self.db_base[collection_name]
+        return self.db_client[collection_name]
 
     def close_db_conection(self):
         """ Terminate Database connection """
