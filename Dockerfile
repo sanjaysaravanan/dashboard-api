@@ -1,13 +1,12 @@
-FROM python:3.7.0-alpine3.8
+FROM python:3.9
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY requirements.txt ./
-
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV FLASK_APP=src/app.py
+EXPOSE 8000
 
-CMD flask run --host=0.0.0.0
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
