@@ -17,9 +17,8 @@ class DBUtil:
 
     def __init__(self, db_name="todo-api"):
         self.client = MongoClient(
-            os.getenv('MONGO_URI')
-        )
-        self.db_base = self.client[db_name]
+            f'mongodb://{self.db_user}:{self.db_password}@{self.db_host}:27017/{db_name}')
+        self.db_client = self.client[db_name]
 
     def get_db(self):
         """
